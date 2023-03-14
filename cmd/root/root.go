@@ -13,7 +13,7 @@ import (
 	startCmd "github.com/CanastaWiki/Canasta-CLI-Go/cmd/start"
 	stopCmd "github.com/CanastaWiki/Canasta-CLI-Go/cmd/stop"
 	versionCmd "github.com/CanastaWiki/Canasta-CLI-Go/cmd/version"
-
+	elasticCmd "github.com/CanastaWiki/Canasta-CLI-Go/cmd/elasticsearch"
 	"github.com/CanastaWiki/Canasta-CLI-Go/internal/logging"
 	"github.com/CanastaWiki/Canasta-CLI-Go/internal/orchestrators"
 
@@ -57,5 +57,6 @@ func init() {
 	rootCmd.AddCommand(startCmd.NewCmdCreate())
 	rootCmd.AddCommand(stopCmd.NewCmdCreate())
 	rootCmd.AddCommand(versionCmd.NewCmdCreate())
+	rootCmd.AddCommand(elasticCmd.NewCmdCreate())
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
 }
