@@ -4,6 +4,7 @@ import (
 	"fmt"
 	createCmd "github.com/CanastaWiki/Canasta-CLI-Go/cmd/create"
 	deleteCmd "github.com/CanastaWiki/Canasta-CLI-Go/cmd/delete"
+	elasticCmd "github.com/CanastaWiki/Canasta-CLI-Go/cmd/elasticsearch"
 	extensionCmd "github.com/CanastaWiki/Canasta-CLI-Go/cmd/extension"
 	importCmd "github.com/CanastaWiki/Canasta-CLI-Go/cmd/import"
 	listCmd "github.com/CanastaWiki/Canasta-CLI-Go/cmd/list"
@@ -76,6 +77,7 @@ func init() {
 	rootCmd.AddCommand(startCmd.NewCmdCreate())
 	rootCmd.AddCommand(stopCmd.NewCmdCreate())
 	rootCmd.AddCommand(versionCmd.NewCmdCreate())
+	rootCmd.AddCommand(elasticCmd.NewCmdCreate())
 	rootCmd.CompletionOptions.DisableDefaultCmd = true
 	cobra.OnInitialize(func() {
 		if OrchestratorPath == "" {
