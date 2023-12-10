@@ -21,6 +21,7 @@ func NewCmdCreate() *cobra.Command {
 		localSettingsPath string
 		envPath           string
 		override          string
+		composer          string
 		canastaId         string
 		domainName        string
 		err               error
@@ -36,7 +37,7 @@ func NewCmdCreate() *cobra.Command {
 				return err
 			}
 			fmt.Println("Importing Canasta")
-			if err := importCanasta(pwd, canastaId, domainName, path, orchestrator, databasePath, localSettingsPath, envPath, override); err != nil {
+			if err := importCanasta(pwd, canastaId, domainName, path, orchestrator, databasePath, localSettingsPath, envPath, override, composer); err != nil {
 				fmt.Print(err.Error(), "\n")
 				if keepConfig {
 					log.Fatal(fmt.Errorf("Keeping all the containers and config files\nExiting"))
@@ -67,13 +68,14 @@ func NewCmdCreate() *cobra.Command {
 	importCmd.Flags().StringVarP(&localSettingsPath, "localsettings", "l", "", "Path to the existing LocalSettings.php")
 	importCmd.Flags().StringVarP(&envPath, "env", "e", "", "Path to the existing .env file")
 	importCmd.Flags().StringVarP(&override, "override", "r", "", "Name of a file to copy to docker-compose.override.yml")
+	importCmd.Flags().StringVarP(&composer, "composer", "c", "", "Name of a file to copy to composer.local.json")
 	importCmd.Flags().BoolVarP(&keepConfig, "keep-config", "k", false, "Keep the config files on installation failure")
 
 	return importCmd
 }
 
 // importCanasta copies LocalSettings.php and databasedump to create canasta from a previous mediawiki installation
-func importCanasta(pwd, canastaId, domainName, path, orchestrator, databasePath, localSettingsPath, envPath, override string) error {
+func importCanasta(pwd, canastaId, domainName, path, orchestrator, databasePath, localSettingsPath, envPath, override, composer string) error {
 	if _, err := config.GetDetails(canastaId); err == nil {
 		log.Fatal(fmt.Errorf("Canasta installation with the ID already exist!"))
 	}
@@ -90,6 +92,9 @@ func importCanasta(pwd, canastaId, domainName, path, orchestrator, databasePath,
 		return err
 	}
 	if err := orchestrators.CopyOverrideFile(path, orchestrator, override, pwd); err != nil {
+		return err
+	}
+	if err := orchestrators.CopyComposerFile(path, orchestrator, composer, pwd); err != nil {
 		return err
 	}
 	if err := orchestrators.Start(path, orchestrator); err != nil {
