@@ -98,9 +98,6 @@ func createCanasta(canastaInfo canasta.CanastaVariables, pwd, path, name, domain
 	defer func() {
 		done <- struct{}{}
 	}()
-	if _, err := config.GetDetails(canastaInfo.Id); err == nil {
-		log.Fatal(fmt.Errorf("Canasta installation with the ID already exist!"))
-	}
 	if err := farmsettings.CreateYaml(name, domain, &yamlPath); err != nil {
 		return err
 	}
